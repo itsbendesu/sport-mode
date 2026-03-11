@@ -15,7 +15,7 @@ export function Listen() {
           scrolling="no"
           frameBorder="no"
           allow="autoplay"
-          src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/sport-mode-810095094/samplemix&color=%23e040fb&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"
+          src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/sport-mode-810095094/hermanns-upstairs-070123&color=%23e040fb&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false"
           className="rounded-lg"
         />
 

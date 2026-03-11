@@ -23,7 +23,7 @@ export function Hero() {
             DJ SPORT MODE
           </h1>
           <p className="mt-4 text-xl sm:text-2xl text-white/70 max-w-2xl animate-fade-in-up-delay">
-            Old-school funk to acid house. Face-melting drops to
+            Old-school funk to progressive house. Face-melting drops to
             heart-warming melodies. Based in Victoria, BC, Canada.
           </p>
           <div className="mt-8 animate-fade-in-up-delay-2">
