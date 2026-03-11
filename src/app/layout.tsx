@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sport Mode | DJ Services for Events",
+  title: "DJ Sport Mode | DJ Services for Events",
   description:
-    "Professional DJ services for weddings, corporate events, and private parties. Book Sport Mode for your next event.",
+    "Professional DJ services for weddings, corporate events, and private parties. Book DJ Sport Mode for your next event.",
 };
 
 export default function RootLayout({

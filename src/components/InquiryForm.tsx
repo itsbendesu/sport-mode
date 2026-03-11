@@ -12,57 +12,79 @@ const eventTypes = [
 
 export function InquiryForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState("");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO: wire up to an API route or email service
-    setSubmitted(true);
+    setSending(true);
+    setError("");
+
+    const form = e.currentTarget;
+    const data = {
+      name: (form.elements.namedItem("name") as HTMLInputElement).value,
+      email: (form.elements.namedItem("email") as HTMLInputElement).value,
+      eventType: (form.elements.namedItem("eventType") as HTMLSelectElement)
+        .value,
+      date: (form.elements.namedItem("date") as HTMLInputElement).value,
+      location: (form.elements.namedItem("location") as HTMLInputElement).value,
+      message: (form.elements.namedItem("message") as HTMLTextAreaElement)
+        .value,
+    };
+
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again or email djsportmode@gmail.com directly.");
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
-    <section id="book" className="py-24 px-6">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Book <span className="gradient-text">Your Event</span>
-          </h2>
-          <p className="text-zinc-500">
-            Tell me about your event and I&apos;ll get back to you within 24
-            hours.
-          </p>
-        </div>
+    <section id="book" className="relative bg-[#0a0a0a]">
+      <div className="max-w-3xl mx-auto px-6 py-24 sm:py-32">
+        <p className="text-sm uppercase tracking-[0.2em] text-[#e040fb] mb-4">
+          Booking
+        </p>
+        <h2 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
+          Let&apos;s make it happen
+        </h2>
+        <p className="text-zinc-500 text-lg mb-12">
+          Tell me about your event and I&apos;ll get back to you within 24
+          hours.
+        </p>
 
         {submitted ? (
-          <div className="text-center py-16 rounded-2xl border border-white/5 bg-white/[0.02]">
-            <div className="text-4xl mb-4">
-              <svg
-                width="48"
-                height="48"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="#e040fb"
-                strokeWidth="1.5"
-                className="mx-auto"
-              >
-                <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
+          <div className="text-center py-20 border border-white/5 rounded-2xl">
+            <svg
+              width="48"
+              height="48"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="#e040fb"
+              strokeWidth="1.5"
+              className="mx-auto mb-4"
+            >
+              <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
             <h3 className="text-xl font-semibold mb-2">Inquiry Sent!</h3>
             <p className="text-zinc-500">
               Thanks for reaching out. I&apos;ll be in touch soon.
             </p>
           </div>
         ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5 p-8 rounded-2xl border border-white/5 bg-white/[0.02]"
-          >
-            <div className="grid sm:grid-cols-2 gap-5">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid sm:grid-cols-2 gap-6">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm text-zinc-400 mb-1.5"
-                >
+                <label htmlFor="name" className="block text-sm text-zinc-400 mb-2">
                   Name
                 </label>
                 <input
@@ -70,15 +92,12 @@ export function InquiryForm() {
                   id="name"
                   name="name"
                   required
-                  className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e040fb]/50 transition-colors"
+                  className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white placeholder:text-zinc-700 focus:outline-none focus:border-[#e040fb] transition-colors"
                   placeholder="Your name"
                 />
               </div>
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm text-zinc-400 mb-1.5"
-                >
+                <label htmlFor="email" className="block text-sm text-zinc-400 mb-2">
                   Email
                 </label>
                 <input
@@ -86,24 +105,21 @@ export function InquiryForm() {
                   id="email"
                   name="email"
                   required
-                  className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e040fb]/50 transition-colors"
+                  className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white placeholder:text-zinc-700 focus:outline-none focus:border-[#e040fb] transition-colors"
                   placeholder="you@email.com"
                 />
               </div>
             </div>
 
             <div>
-              <label
-                htmlFor="eventType"
-                className="block text-sm text-zinc-400 mb-1.5"
-              >
+              <label htmlFor="eventType" className="block text-sm text-zinc-400 mb-2">
                 Event Type
               </label>
               <select
                 id="eventType"
                 name="eventType"
                 required
-                className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-[#e040fb]/50 transition-colors"
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white focus:outline-none focus:border-[#e040fb] transition-colors"
               >
                 <option value="" className="bg-[#0a0a0a]">
                   Select event type
@@ -116,12 +132,9 @@ export function InquiryForm() {
               </select>
             </div>
 
-            <div className="grid sm:grid-cols-2 gap-5">
+            <div className="grid sm:grid-cols-2 gap-6">
               <div>
-                <label
-                  htmlFor="date"
-                  className="block text-sm text-zinc-400 mb-1.5"
-                >
+                <label htmlFor="date" className="block text-sm text-zinc-400 mb-2">
                   Event Date
                 </label>
                 <input
@@ -129,48 +142,49 @@ export function InquiryForm() {
                   id="date"
                   name="date"
                   required
-                  className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white focus:outline-none focus:border-[#e040fb]/50 transition-colors"
+                  className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white focus:outline-none focus:border-[#e040fb] transition-colors"
                 />
               </div>
               <div>
-                <label
-                  htmlFor="guests"
-                  className="block text-sm text-zinc-400 mb-1.5"
-                >
-                  Expected Guests
+                <label htmlFor="location" className="block text-sm text-zinc-400 mb-2">
+                  Location
                 </label>
                 <input
-                  type="number"
-                  id="guests"
-                  name="guests"
-                  className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e040fb]/50 transition-colors"
-                  placeholder="~100"
+                  type="text"
+                  id="location"
+                  name="location"
+                  className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white placeholder:text-zinc-700 focus:outline-none focus:border-[#e040fb] transition-colors"
+                  placeholder="Venue or city"
                 />
               </div>
             </div>
 
             <div>
-              <label
-                htmlFor="message"
-                className="block text-sm text-zinc-400 mb-1.5"
-              >
+              <label htmlFor="message" className="block text-sm text-zinc-400 mb-2">
                 Tell me about your event
               </label>
               <textarea
                 id="message"
                 name="message"
                 rows={4}
-                className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder:text-zinc-600 focus:outline-none focus:border-[#e040fb]/50 transition-colors resize-none"
-                placeholder="Venue, vibe, must-play songs, anything else..."
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white placeholder:text-zinc-700 focus:outline-none focus:border-[#e040fb] transition-colors resize-none"
+                placeholder="Vibe, guest count, must-play songs, anything else..."
               />
             </div>
 
-            <button
-              type="submit"
-              className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#e040fb] to-[#7c4dff] text-white font-medium hover:opacity-90 transition-opacity cursor-pointer"
-            >
-              Send Inquiry
-            </button>
+            {error && (
+              <p className="text-red-400 text-sm">{error}</p>
+            )}
+
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={sending}
+                className="w-full sm:w-auto px-12 py-4 rounded-full bg-gradient-to-r from-[#e040fb] to-[#7c4dff] text-white font-medium hover:opacity-90 transition-opacity cursor-pointer text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {sending ? "Sending..." : "Send Inquiry"}
+              </button>
+            </div>
           </form>
         )}
       </div>

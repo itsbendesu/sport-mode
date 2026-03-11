@@ -1,11 +1,14 @@
 export function Footer() {
   return (
-    <footer className="border-t border-white/5 py-8 px-6">
-      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-        <span className="text-sm font-bold gradient-text">SPORT MODE</span>
+    <footer className="bg-[#0a0a0a] border-t border-white/5 py-12 px-6">
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
+        <span className="text-sm font-bold tracking-[0.15em] text-white">
+          DJ SPORT MODE
+        </span>
+
         <div className="flex items-center gap-6">
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/djsportmode/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-zinc-500 hover:text-white transition-colors"
@@ -16,7 +19,7 @@ export function Footer() {
             </svg>
           </a>
           <a
-            href="https://soundcloud.com"
+            href="https://soundcloud.com/sport-mode-810095094"
             target="_blank"
             rel="noopener noreferrer"
             className="text-zinc-500 hover:text-white transition-colors"
@@ -27,8 +30,9 @@ export function Footer() {
             </svg>
           </a>
         </div>
+
         <span className="text-sm text-zinc-600">
-          &copy; {new Date().getFullYear()} Sport Mode
+          Victoria, BC
         </span>
       </div>
     </footer>
