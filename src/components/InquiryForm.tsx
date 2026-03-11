@@ -20,29 +20,25 @@ export function InquiryForm() {
     setSending(true);
     setError("");
 
-    const form = e.currentTarget;
-    const data = {
-      name: (form.elements.namedItem("name") as HTMLInputElement).value,
-      email: (form.elements.namedItem("email") as HTMLInputElement).value,
-      eventType: (form.elements.namedItem("eventType") as HTMLSelectElement)
-        .value,
-      date: (form.elements.namedItem("date") as HTMLInputElement).value,
-      location: (form.elements.namedItem("location") as HTMLInputElement).value,
-      message: (form.elements.namedItem("message") as HTMLTextAreaElement)
-        .value,
-    };
+    const formData = new FormData(e.currentTarget);
 
     try {
-      const res = await fetch("/api/inquiry", {
+      const res = await fetch("https://formsubmit.co/ajax/djsportmode@gmail.com", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        headers: { Accept: "application/json" },
+        body: formData,
       });
 
-      if (!res.ok) throw new Error();
-      setSubmitted(true);
+      const data = await res.json();
+      if (data.success === "true") {
+        setSubmitted(true);
+      } else {
+        throw new Error();
+      }
     } catch {
-      setError("Something went wrong. Please try again or email djsportmode@gmail.com directly.");
+      setError(
+        "Something went wrong. Please try again or email djsportmode@gmail.com directly."
+      );
     } finally {
       setSending(false);
     }
@@ -82,6 +78,10 @@ export function InquiryForm() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
+            <input type="hidden" name="_subject" value="New Booking Inquiry from sportmode.ca" />
+            <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_captcha" value="false" />
+
             <div className="grid sm:grid-cols-2 gap-6">
               <div>
                 <label htmlFor="name" className="block text-sm text-zinc-400 mb-2">
@@ -90,7 +90,7 @@ export function InquiryForm() {
                 <input
                   type="text"
                   id="name"
-                  name="name"
+                  name="Name"
                   required
                   className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white placeholder:text-zinc-700 focus:outline-none focus:border-[#e040fb] transition-colors"
                   placeholder="Your name"
@@ -103,7 +103,7 @@ export function InquiryForm() {
                 <input
                   type="email"
                   id="email"
-                  name="email"
+                  name="Email"
                   required
                   className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white placeholder:text-zinc-700 focus:outline-none focus:border-[#e040fb] transition-colors"
                   placeholder="you@email.com"
@@ -117,7 +117,7 @@ export function InquiryForm() {
               </label>
               <select
                 id="eventType"
-                name="eventType"
+                name="Event Type"
                 required
                 className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white focus:outline-none focus:border-[#e040fb] transition-colors"
               >
@@ -140,7 +140,7 @@ export function InquiryForm() {
                 <input
                   type="date"
                   id="date"
-                  name="date"
+                  name="Event Date"
                   required
                   className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white focus:outline-none focus:border-[#e040fb] transition-colors"
                 />
@@ -152,7 +152,7 @@ export function InquiryForm() {
                 <input
                   type="text"
                   id="location"
-                  name="location"
+                  name="Location"
                   className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white placeholder:text-zinc-700 focus:outline-none focus:border-[#e040fb] transition-colors"
                   placeholder="Venue or city"
                 />
@@ -165,16 +165,14 @@ export function InquiryForm() {
               </label>
               <textarea
                 id="message"
-                name="message"
+                name="Message"
                 rows={4}
                 className="w-full px-0 py-3 bg-transparent border-0 border-b border-white/10 text-white placeholder:text-zinc-700 focus:outline-none focus:border-[#e040fb] transition-colors resize-none"
                 placeholder="Vibe, guest count, must-play songs, anything else..."
               />
             </div>
 
-            {error && (
-              <p className="text-red-400 text-sm">{error}</p>
-            )}
+            {error && <p className="text-red-400 text-sm">{error}</p>}
 
             <div className="pt-4">
               <button
