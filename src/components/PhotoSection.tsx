@@ -14,6 +14,7 @@ export function PhotoSection({ src, alt, credit }: PhotoSectionProps) {
         alt={alt}
         fill
         className="object-cover"
+        sizes="100vw"
         quality={85}
       />
       {credit && (
